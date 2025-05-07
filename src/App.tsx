@@ -6,8 +6,6 @@ import Users from './pages/users';
 import ProfileEdit from './pages/profile-edit';
 import NotFound from './pages/not-found';
 
-import './styles/reset.css';
-
 function App() {
   return (
     <Routes>
