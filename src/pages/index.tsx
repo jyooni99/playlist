@@ -1,5 +1,5 @@
 const Home = () => {
-  return <div className='min-h-screen flex items-center justify-center'></div>;
+  return <div className='w-full min-h-screen '>Home</div>;
 };
 
 export default Home;

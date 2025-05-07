@@ -1,0 +1,45 @@
+import { Link, useNavigate } from 'react-router-dom';
+
+const Header = () => {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate('/login');
+  }
+
+  return (
+    <header>
+      <nav className='w-full fixed top-0 bg-white'>
+        <div className='w-full flex justify-between items-center py-5 px-5'>
+          <div>
+            <Link to='/' className='font-bold text-xl'>
+              PlayList
+            </Link>
+          </div>
+          <div className='w-1/2 hidden min-[480px]:flex min-[480px]:relative'>
+            <input
+              type='text'
+              className='w-full outline-none placeholder:text-gray-400 placeholder:font-bold placeholder:text-sm border border-gray-400 pl-4 py-1.5 rounded-full overflow-hidden focus:ring-1 focus:ring-black'
+              placeholder='검색어를 입력하세요'
+            />
+            <button className='absolute right-0 w-[70px] h-full cursor-pointer border-l-1 bg-black'>
+              검색
+            </button>
+          </div>
+          <div>
+            <div>
+              <button
+                onClick={handleClick}
+                className='cursor-pointer border bg-black text-white py-1.5 px-4 rounded-full font-bold '
+              >
+                로그인
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
