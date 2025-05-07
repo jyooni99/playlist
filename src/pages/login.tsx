@@ -1,5 +1,5 @@
 const Login = () => {
-  return <div>Login</div>;
+  return <div className='flex color-red'>Login</div>;
 };
 
 export default Login;
