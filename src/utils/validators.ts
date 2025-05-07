@@ -19,8 +19,11 @@ function validatePassword(value: string): string | undefined {
 export function loginValidator(values: Record<string, string>): Record<string, string | undefined> {
   const errors: Record<string, string | undefined> = {};
 
-  errors.email = validateEmail(values.email);
-  errors.password = validatePassword(values.password);
+  const emailError = validateEmail(values.email);
+  if (emailError) errors.email = emailError;
+
+  const pwError = validatePassword(values.password);
+  if (pwError) errors.password = pwError;
 
   return errors;
 }

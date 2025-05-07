@@ -1,26 +1,49 @@
 import { Link } from 'react-router-dom';
 import Input from '../components/input';
+import useForm from '../hooks/use-form';
+import { loginValidator } from '../utils/validators';
 
 const Login = () => {
+  const initialValues = { email: '', password: '' };
+
+  const onSubmit = (values: Record<string, string>) => {
+    console.log('로그인 성공', values);
+  };
+
+  const { values, touched, errors, handleInputChange, handleBlur, handleSubmit } = useForm({
+    initialValues,
+    onSubmit,
+    validate: loginValidator,
+  });
+
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
       <div className='w-full max-w-md bg-white pt-10 pb-20 px-8 rounded-xl'>
         {/* 로그인 */}
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>로그인</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <Input
-            label='이메일'
-            type='email'
             id='email'
+            type='email'
+            label='이메일'
             placeholder='이메일을 입력하세요'
-            required
+            value={values.email}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
           />
+          {touched.email && errors.email && <span>{errors.email}</span>}
+
           <Input
-            label='비밀번호'
-            type='password'
             id='password'
+            type='password'
+            label='비밀번호'
             placeholder='비밀번호를 입력하세요'
+            value={values.password}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
           />
+          {touched.password && errors.password && <span>{errors.password}</span>}
+
           <div className='mt-8'>
             <button
               type='submit'
