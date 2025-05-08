@@ -1,17 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Input from '../components/input';
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
 import { loginFields, loginInitialValues } from '../constants/form-fields';
 import type { LoginFormValuesType } from '../types/form';
+import { useAuthStore } from '../stores/use-auth-store';
 
 const Login = () => {
-  const onSubmit = (values: Record<string, string>) => {
-    console.log('로그인 성공', values);
+  const nav = useNavigate();
+  const { login } = useAuthStore();
+
+  const onSubmit = (values: LoginFormValuesType) => {
+    try {
+      login({ email: values.email, password: values.password });
+    } catch {
+      console.error('로그인 실패');
+    }
+
+    nav('/home');
   };
 
-  const { values, touched, errors, handleInputChange, handleBlur, handleSubmit } =
+  const { values, touched, errors, isValid, handleInputChange, handleBlur, handleSubmit } =
     useForm<LoginFormValuesType>({
       initialValues: loginInitialValues,
       onSubmit,
@@ -42,7 +52,8 @@ const Login = () => {
           <div className='mt-8'>
             <button
               type='submit'
-              className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition'
+              className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition disabled:bg-gray-400 disabled:cursor-default'
+              disabled={!isValid}
             >
               로그인
             </button>
