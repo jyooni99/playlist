@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import Input from '../components/common/input';
+import Input from '../components/input';
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
-import { loginFields } from '../constants/form-field';
+import { loginFields } from '../constants/form-fields';
 
 const Login = () => {
   const initialValues = { email: '', password: '' };
