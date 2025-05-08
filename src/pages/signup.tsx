@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Input from '../components/input';
 import Radio from '../components/radio';
@@ -12,10 +12,28 @@ import {
   signUpInitialValues,
 } from '../constants/form-fields';
 import type { SignUpFormValuesType } from '../types/form';
+import { useAuthStore } from '../stores/use-auth-store';
 
 const SignUp = () => {
+  const nav = useNavigate();
+  const { login } = useAuthStore();
+
   const onSubmit = (values: SignUpFormValuesType) => {
-    console.log('회원가입 성공', values);
+    try {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const updatedUsers = [...users, values];
+
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
+    } catch {
+      console.error('회원가입 실패');
+    }
+
+    login({
+      email: values.email,
+      password: values.password,
+    });
+
+    nav('/home');
   };
 
   const {

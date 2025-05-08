@@ -31,7 +31,6 @@ export const signUpFields: SignUpInputField[] = [
     type: 'email',
     label: '이메일',
     placeholder: '이메일을 입력하세요',
-    rightButtonLabel: '중복 확인',
   },
   {
     id: 'password',
