@@ -11,12 +11,14 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // 입력 필드 별 값 업데이트
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const formattedValue = name === 'birth' ? formattedDate(value) : value;
     setValues((prevValues) => ({ ...prevValues, [name]: formattedValue }));
+    setIsInitialized(true);
   };
 
   // checkbox용 onChange 함수 (복수선택)
@@ -35,6 +37,7 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
     });
 
     setTouched((prevTouched) => ({ ...prevTouched, [key]: true }));
+    setIsInitialized(true);
   };
 
   // 입력 필드 별 touched 상태 업데이트 (touched 상태인 입력필드만 검사)
@@ -67,6 +70,7 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
     handleBlur,
     handleSubmit,
     handleCheckboxChange,
+    isValid: Object.keys(errors).length === 0 && isInitialized,
   };
 }
 

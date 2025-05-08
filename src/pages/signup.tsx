@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
 import Input from '../components/input';
+import Radio from '../components/radio';
+import Checkbox from '../components/checkbox';
 import useForm from '../hooks/use-form';
 import { signUpValidator } from '../utils/validators';
 import {
@@ -9,8 +11,6 @@ import {
   signUpFields,
   signUpInitialValues,
 } from '../constants/form-fields';
-import Radio from '../components/radio';
-import Checkbox from '../components/checkbox';
 import type { SignUpFormValuesType } from '../types/form';
 
 const SignUp = () => {
@@ -22,6 +22,7 @@ const SignUp = () => {
     values,
     touched,
     errors,
+    isValid,
     handleInputChange,
     handleCheckboxChange,
     handleBlur,
@@ -111,7 +112,8 @@ const SignUp = () => {
           <div className='mt-8'>
             <button
               type='submit'
-              className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition'
+              className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition disabled:bg-gray-400 disabled:cursor-default'
+              disabled={!isValid}
             >
               회원가입
             </button>
