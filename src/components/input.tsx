@@ -1,7 +1,7 @@
 type InputProps = {
   label?: string;
   id: string;
-  type?: string;
+  type?: 'text' | 'password' | 'email';
   value: string;
   placeholder?: string;
   required?: boolean;
