@@ -38,6 +38,7 @@ export const signUpFields: SignUpInputField[] = [
     label: '비밀번호',
     placeholder: '비밀번호를 입력하세요',
     helperText: '8자 이상, 영문/숫자/특수기호(!@#$%^&*) 조합',
+    showToggle: true,
   },
   {
     id: 'birth',

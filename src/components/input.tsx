@@ -43,11 +43,11 @@ const Input = ({
 
         {/* input */}
         <input
-          className={` ${rightButtonLabel ? 'w-[76%]' : 'w-full'} px-4 py-2 border rounded-md focus:outline-none focus:ring-1 ${
+          className={` ${rightButtonLabel ? 'w-[76%]' : 'w-full'} px-4 py-2 border rounded-md relative focus:outline-none focus:ring-1 ${
             hasError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'
           }`}
           id={id}
-          type={type}
+          type={visible ? 'text' : type}
           name={id}
           value={value}
           placeholder={placeholder}
@@ -60,7 +60,7 @@ const Input = ({
         {showToggle && type === 'password' && (
           <button
             type='button'
-            className='absolute inset-y-0 right-10 px-2 text-sm text-gray-500'
+            className='absolute bottom-0 right-2 px-2 text-sm text-gray-500 transform -translate-y-1/2 cursor-pointer'
             onClick={() => setVisible((prev) => !prev)}
           >
             {visible ? '숨김' : '표시'}
@@ -71,7 +71,7 @@ const Input = ({
         {rightButtonLabel && (
           <button
             className='absolute right-0 top-1/2 px-3 cursor-pointer h-full rounded-sm text-white text-xs transform -translate-y-1/2 bg-black'
-            onClick={rightButtonAction}
+            onClick={() => rightButtonAction}
           >
             {rightButtonLabel}
           </button>

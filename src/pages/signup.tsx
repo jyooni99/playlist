@@ -67,6 +67,7 @@ const SignUp = () => {
               rightButtonLabel,
               rightButtonAction,
               inputMode,
+              showToggle,
             }) => {
               return (
                 <Input
@@ -84,6 +85,7 @@ const SignUp = () => {
                   rightButtonAction={rightButtonAction}
                   helperText={helperText}
                   inputMode={inputMode}
+                  showToggle={showToggle}
                 />
               );
             },
