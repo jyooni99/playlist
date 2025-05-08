@@ -1,8 +1,12 @@
-export type InputFieldType = 'text' | 'password' | 'email';
+export type InputFieldType = 'text' | 'password' | 'email' | 'number';
 
-export interface InputField {
+export type InputField = {
   id: string;
   type: InputFieldType;
-  label: string;
-  placeholder: string;
-}
+  label?: string;
+  placeholder?: string;
+  helperText?: string;
+  showToggle?: boolean;
+  rightButtonLabel?: string;
+  rightButtonAction?: () => void;
+};
