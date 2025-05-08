@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import Input from '../components/input';
+
+import Input from '../components/common/input';
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
+import { loginFields } from '../constants/form-field';
 
 const Login = () => {
   const initialValues = { email: '', password: '' };
@@ -19,31 +21,24 @@ const Login = () => {
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
       <div className='w-full max-w-md bg-white pt-10 pb-20 px-8 rounded-xl'>
-        {/* 로그인 */}
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>로그인</h2>
         <form onSubmit={handleSubmit}>
-          <Input
-            id='email'
-            type='email'
-            label='이메일'
-            placeholder='이메일을 입력하세요'
-            value={values.email}
-            onChange={handleInputChange}
-            onBlur={handleBlur}
-          />
-          {touched.email && errors.email && <span>{errors.email}</span>}
-
-          <Input
-            id='password'
-            type='password'
-            label='비밀번호'
-            placeholder='비밀번호를 입력하세요'
-            value={values.password}
-            onChange={handleInputChange}
-            onBlur={handleBlur}
-          />
-          {touched.password && errors.password && <span>{errors.password}</span>}
-
+          {loginFields.map(({ id, type, label, placeholder }) => {
+            return (
+              <Input
+                key={id}
+                id={id}
+                type={type}
+                label={label}
+                placeholder={placeholder}
+                value={values[id]}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                error={errors[id]}
+                touched={touched[id]}
+              />
+            );
+          })}
           <div className='mt-8'>
             <button
               type='submit'
