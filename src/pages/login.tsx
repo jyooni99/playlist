@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import Input from '../components/input';
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
-import { loginFields } from '../constants/form-fields';
+import { loginFields, loginInitialValues } from '../constants/form-fields';
+import type { LoginFormValuesType } from '../types/form';
 
 const Login = () => {
-  const initialValues = { email: '', password: '' };
-
   const onSubmit = (values: Record<string, string>) => {
     console.log('로그인 성공', values);
   };
 
-  const { values, touched, errors, handleInputChange, handleBlur, handleSubmit } = useForm({
-    initialValues,
-    onSubmit,
-    validate: loginValidator,
-  });
+  const { values, touched, errors, handleInputChange, handleBlur, handleSubmit } =
+    useForm<LoginFormValuesType>({
+      initialValues: loginInitialValues,
+      onSubmit,
+      validate: loginValidator,
+    });
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>

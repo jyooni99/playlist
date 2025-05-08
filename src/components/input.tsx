@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import type { InputField } from '../types/form';
+import type { SignUpInputField } from '../types/field';
 
-type InputProps = InputField & {
-  value: string;
+type InputProps = SignUpInputField & {
+  id: string;
+  value: string | string[];
   error?: string;
   touched?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -78,7 +79,7 @@ const Input = ({
       </div>
 
       {/* 에러 메시지*/}
-      {hasError && <p className='mt-1 text-xs text-red-600'>{error}</p>}
+      {hasError && <p className='mt-2 text-xs text-red-600'>{error}</p>}
     </div>
   );
 };

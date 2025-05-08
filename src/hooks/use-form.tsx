@@ -1,23 +1,40 @@
 import { useEffect, useState } from 'react';
 import { formattedDate } from '../utils/formatted-date';
 
-type UseFormProps = {
-  initialValues: Record<string, string>;
-  onSubmit: (values: Record<string, string>) => void;
-  validate: (values: Record<string, string>) => Record<string, string | undefined>;
+type UseFormProps<T> = {
+  initialValues: T;
+  onSubmit: (values: T) => void;
+  validate: (values: T) => Partial<Record<keyof T, string>>;
 };
 
-const useForm = ({ initialValues, onSubmit, validate }: UseFormProps) => {
-  const [values, setValues] = useState<Record<string, string>>(initialValues);
-  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
+function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
+  const [values, setValues] = useState<T>(initialValues);
+  const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
 
   // 입력 필드 별 값 업데이트
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     const formattedValue = name === 'birth' ? formattedDate(value) : value;
     setValues((prevValues) => ({ ...prevValues, [name]: formattedValue }));
+  };
+
+  // checkbox용 onChange 함수 (복수선택)
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, checked } = e.target;
+    const key = name as keyof T;
+
+    setValues((prevValues) => {
+      const current = Array.isArray(prevValues[key]) ? prevValues[key] : [];
+
+      if (checked) {
+        return { ...prevValues, [key]: [...current, value] };
+      } else {
+        return { ...prevValues, [key]: current.filter((checkValue) => checkValue !== value) };
+      }
+    });
+
+    setTouched((prevTouched) => ({ ...prevTouched, [key]: true }));
   };
 
   // 입력 필드 별 touched 상태 업데이트 (touched 상태인 입력필드만 검사)
@@ -49,7 +66,8 @@ const useForm = ({ initialValues, onSubmit, validate }: UseFormProps) => {
     handleInputChange,
     handleBlur,
     handleSubmit,
+    handleCheckboxChange,
   };
-};
+}
 
 export default useForm;

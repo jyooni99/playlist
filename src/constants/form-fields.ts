@@ -1,15 +1,16 @@
-import type { InputField, RadioField } from '../types/form';
+import type { LoginFormValuesType, SignUpFormValuesType } from '../types/form';
+import type { CheckboxField, LoginInputField, RadioField, SignUpInputField } from '../types/field';
 
-export const loginInitialValues = { email: '', password: '' };
-export const signUpInitialValues = {
+export const loginInitialValues: LoginFormValuesType = { email: '', password: '' };
+export const signUpInitialValues: SignUpFormValuesType = {
   email: '',
   password: '',
   birth: '',
   jobCategory: '개발자',
-  interests: '',
+  interests: [],
 };
 
-export const loginFields: InputField[] = [
+export const loginFields: LoginInputField[] = [
   {
     id: 'email',
     type: 'email',
@@ -24,7 +25,7 @@ export const loginFields: InputField[] = [
   },
 ];
 
-export const signUpFields: InputField[] = [
+export const signUpFields: SignUpInputField[] = [
   {
     id: 'email',
     type: 'email',
@@ -54,4 +55,15 @@ export const jobCategory: RadioField[] = [
   { name: 'jobCategory', id: 'dataAnalyst', value: '데이터 분석가' },
   { name: 'jobCategory', id: 'PM', value: 'PM' },
   { name: 'jobCategory', id: 'Marketer', value: '마케터' },
+];
+
+export const interests: CheckboxField[] = [
+  { name: 'interests', id: 'programming', value: '프로그래밍' },
+  { name: 'interests', id: 'infrastructure', value: '인프라' },
+  { name: 'interests', id: 'planning', value: '기획' },
+  { name: 'interests', id: 'data', value: '데이터' },
+  { name: 'interests', id: 'design', value: '디자인' },
+  { name: 'interests', id: 'business', value: '비즈니스' },
+  { name: 'interests', id: 'marketing', value: '마케팅' },
+  { name: 'interests', id: 'careers/jobChange', value: '취업/이직' },
 ];
