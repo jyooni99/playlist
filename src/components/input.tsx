@@ -23,6 +23,7 @@ const Input = ({
   showToggle = false,
   rightButtonLabel,
   rightButtonAction,
+  inputMode,
 }: InputProps) => {
   const hasError = touched && error;
   const [visible, setVisible] = useState(false);
@@ -51,6 +52,7 @@ const Input = ({
           placeholder={placeholder}
           onChange={onChange}
           onBlur={onBlur}
+          inputMode={inputMode}
         />
 
         {/* 비밀번호 확인 */}

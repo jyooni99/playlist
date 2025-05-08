@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { formattedDate } from '../utils/formatted-date';
 
 type UseFormProps = {
   initialValues: Record<string, string>;
@@ -14,7 +15,9 @@ const useForm = ({ initialValues, onSubmit, validate }: UseFormProps) => {
   // 입력 필드 별 값 업데이트
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setValues((prevValues) => ({ ...prevValues, [name]: value }));
+
+    const formattedValue = name === 'birth' ? formattedDate(value) : value;
+    setValues((prevValues) => ({ ...prevValues, [name]: formattedValue }));
   };
 
   // 입력 필드 별 touched 상태 업데이트 (touched 상태인 입력필드만 검사)

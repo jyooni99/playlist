@@ -22,7 +22,16 @@ const SignUp = () => {
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>회원가입</h2>
         <form onSubmit={handleSubmit}>
           {signUpFields.map(
-            ({ id, type, label, placeholder, helperText, rightButtonLabel, rightButtonAction }) => {
+            ({
+              id,
+              type,
+              label,
+              placeholder,
+              helperText,
+              rightButtonLabel,
+              rightButtonAction,
+              inputMode,
+            }) => {
               return (
                 <Input
                   key={id}
@@ -38,6 +47,7 @@ const SignUp = () => {
                   rightButtonLabel={rightButtonLabel}
                   rightButtonAction={rightButtonAction}
                   helperText={helperText}
+                  inputMode={inputMode}
                 />
               );
             },

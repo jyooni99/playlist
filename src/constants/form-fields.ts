@@ -42,8 +42,9 @@ export const signUpFields: InputField[] = [
   },
   {
     id: 'birth',
-    type: 'number',
+    type: 'text',
     label: '생년월일',
-    placeholder: 'YYYY/MM/DD',
+    placeholder: '생년월일 8자리를 입력하세요',
+    inputMode: 'numeric',
   },
 ];
