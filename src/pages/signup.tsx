@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import Input from '../components/input';
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
-import { signUpFields, signUpInitialValues } from '../constants/form-fields';
+import { jobCategory, signUpFields, signUpInitialValues } from '../constants/form-fields';
+import Radio from '../components/radio';
 
 const SignUp = () => {
   const onSubmit = (values: Record<string, string>) => {
@@ -52,6 +53,23 @@ const SignUp = () => {
               );
             },
           )}
+
+          <p className='text-sm'>직군</p>
+          <div className='flex flex-col py-2 gap-4'>
+            {jobCategory.map(({ name, id, value }) => {
+              return (
+                <Radio
+                  key={id}
+                  id={id}
+                  name={name}
+                  value={value}
+                  checked={values.jobCategory === value}
+                  onChange={handleInputChange}
+                />
+              );
+            })}
+          </div>
+
           <div className='mt-8'>
             <button
               type='submit'

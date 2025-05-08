@@ -1,12 +1,11 @@
-import type { InputField } from '../types/form';
+import type { InputField, RadioField } from '../types/form';
 
 export const loginInitialValues = { email: '', password: '' };
 export const signUpInitialValues = {
   email: '',
   password: '',
-  passwordConfirm: '',
   birth: '',
-  jobCategory: '',
+  jobCategory: '개발자',
   interests: '',
 };
 
@@ -47,4 +46,12 @@ export const signUpFields: InputField[] = [
     placeholder: '생년월일 8자리를 입력하세요',
     inputMode: 'numeric',
   },
+];
+
+export const jobCategory: RadioField[] = [
+  { name: 'jobCategory', id: 'developer', value: '개발자' },
+  { name: 'jobCategory', id: 'designer', value: '디자이너' },
+  { name: 'jobCategory', id: 'dataAnalyst', value: '데이터 분석가' },
+  { name: 'jobCategory', id: 'PM', value: 'PM' },
+  { name: 'jobCategory', id: 'Marketer', value: '마케터' },
 ];

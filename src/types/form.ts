@@ -9,4 +9,11 @@ export type InputField = {
   showToggle?: boolean;
   rightButtonLabel?: string;
   rightButtonAction?: () => void;
+  inputMode?: 'numeric' | 'decimal' | 'tel' | 'search' | 'url' | 'email';
+};
+
+export type RadioField = {
+  name: string;
+  id: string;
+  value: string;
 };
