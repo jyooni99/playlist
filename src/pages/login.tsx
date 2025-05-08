@@ -21,7 +21,7 @@ const Login = () => {
     nav('/home');
   };
 
-  const { values, touched, errors, handleInputChange, handleBlur, handleSubmit } =
+  const { values, touched, errors, isValid, handleInputChange, handleBlur, handleSubmit } =
     useForm<LoginFormValuesType>({
       initialValues: loginInitialValues,
       onSubmit,
@@ -52,7 +52,8 @@ const Login = () => {
           <div className='mt-8'>
             <button
               type='submit'
-              className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition'
+              className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition disabled:bg-gray-400 disabled:cursor-default'
+              disabled={!isValid}
             >
               로그인
             </button>
