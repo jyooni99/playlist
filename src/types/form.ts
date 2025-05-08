@@ -1,8 +1,10 @@
-export type InputFieldType = 'text' | 'password' | 'email';
+export type LoginFormValuesType = {
+  email: string;
+  password: string;
+};
 
-export interface InputField {
-  id: string;
-  type: InputFieldType;
-  label: string;
-  placeholder: string;
-}
+export type SignUpFormValuesType = LoginFormValuesType & {
+  birth: string;
+  jobCategory: string;
+  interests: string[];
+};

@@ -22,7 +22,7 @@ const Header = () => {
           <div className='w-1/2 hidden min-[480px]:flex min-[480px]:relative'>
             <input
               type='text'
-              className='w-full outline-none placeholder:text-gray-400 placeholder:font-bold placeholder:text-sm border border-gray-400 pl-4 pr-20 py-1.5 rounded-full overflow-hidden focus:ring-1 focus:ring-black'
+              className='w-full placeholder:text-gray-400 placeholder:font-bold placeholder:text-sm border border-gray-400 pl-4 pr-20 py-1.5 rounded-full overflow-hidden focus:outline-1 focus:outline-black'
               placeholder='검색어를 입력하세요'
             />
             <button className='absolute right-0 px-5 h-full cursor-pointer border-l-1 border-gray-400'>
