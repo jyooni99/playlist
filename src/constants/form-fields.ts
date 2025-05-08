@@ -1,4 +1,6 @@
-export const loginFields = [
+import type { InputField } from '../types/form';
+
+export const loginFields: InputField[] = [
   {
     id: 'email',
     type: 'email',
