@@ -26,9 +26,9 @@ const Input = ({
   const [visible, setVisible] = useState(false);
 
   return (
-    <>
+    <div className='relative w-full'>
       <input
-        className={`w-full px-4 py-2 border rounded-md relative focus:outline-none focus:ring-1 ${
+        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 ${
           hasError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'
         }`}
         id={id}
@@ -51,7 +51,7 @@ const Input = ({
           {visible ? '숨김' : '표시'}
         </button>
       )}
-    </>
+    </div>
   );
 };
 
