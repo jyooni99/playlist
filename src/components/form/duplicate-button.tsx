@@ -10,7 +10,7 @@ export const DuplicateButton = ({ value, onCheck, children }: DuplicateButtonPro
   return (
     <button
       type='button'
-      className='text-sm bg-black h-[42px] rounded-sm px-3 cursor-pointer text-white'
+      className='text-sm bg-black h-[42px] rounded-sm px-3 w-[40%] sm:w-[25%] cursor-pointer text-white '
       onClick={() => onCheck(value)}
     >
       {children}

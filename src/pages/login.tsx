@@ -1,12 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import Input from '../components/form/input';
+import InputWrapper from '../components/form/input-wrapper';
+
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
 import { loginFields, loginInitialValues } from '../constants/form-fields';
+
 import type { LoginFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
-import InputWrapper from '../components/form/input-wrapper';
 
 const Login = () => {
   const nav = useNavigate();
@@ -39,8 +41,8 @@ const Login = () => {
   });
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
-      <div className='w-full max-w-md bg-white pt-10 pb-20 px-8 rounded-xl'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 px-5'>
+      <div className='w-full max-w-lg bg-white pt-10 pb-20 sm:px-8 px-5 rounded-xl '>
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>로그인</h2>
         <form onSubmit={handleSubmit}>
           {loginFields.map(({ id, type, label, placeholder }) => {

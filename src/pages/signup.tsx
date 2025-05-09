@@ -90,8 +90,8 @@ const SignUp = () => {
   }, [values.email, touched.email, isCheckedEmail, setFieldError]);
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
-      <div className='w-full max-w-md bg-white pt-10 pb-20 px-8 rounded-xl'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 py-20 px-5'>
+      <div className='w-full max-w-lg bg-white pt-10 pb-20 sm:px-8 px-5 rounded-xl'>
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>회원가입</h2>
         <form onSubmit={handleSubmit}>
           {/* 이메일, 비밀번호, 생년월일 */}
@@ -182,7 +182,7 @@ const SignUp = () => {
         <div className='mt-6 text-center'>
           <p className='text-sm text-gray-600'>
             <span>Playlist 회원이신가요?</span>
-            <Link to='/signup' className='text-black font-semibold hover:underline ml-1'>
+            <Link to='/login' className='text-black font-semibold hover:underline ml-1'>
               로그인
             </Link>
           </p>
