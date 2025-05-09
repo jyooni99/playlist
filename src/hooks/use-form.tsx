@@ -9,9 +9,12 @@ type UseFormProps<T> = {
 
 function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
   const [values, setValues] = useState<T>(initialValues);
-  const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
+  const [externalErrors, setExternalErrors] = useState<Partial<Record<keyof T, string>>>({});
+  const [internalErrors, setInternalErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
+
+  const errors = { ...externalErrors, ...internalErrors }; // 외부, 내부 에러 메시지 병합
 
   // 입력 필드 별 값 업데이트
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,26 +53,26 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate(values);
-    setErrors(validationErrors);
+    setInternalErrors(validationErrors);
 
-    if (!Object.keys(validationErrors).length) {
+    if (!Object.keys(validationErrors).length && !Object.keys(externalErrors).length) {
       onSubmit(values);
     }
   };
 
   // 외부에서 에러 메시지 설정
   const setFieldError = (name: keyof T, errorMessage: string) => {
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+    setExternalErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
   };
 
   useEffect(() => {
     const validationErrors = validate(values);
-    setErrors(validationErrors);
+    setInternalErrors(validationErrors);
   }, [values, validate]);
 
   return {
     values,
-    errors,
+    errors: errors,
     touched,
     handleInputChange,
     handleBlur,

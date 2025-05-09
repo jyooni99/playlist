@@ -14,20 +14,18 @@ import {
 import type { SignUpFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
 import InputWrapper from '../components/form/input-wrapper';
+import { DuplicateButton } from '../components/duplicate-button';
+import { isEmailDuplicated } from '../utils/is-email-duplicated';
 
 const SignUp = () => {
   const nav = useNavigate();
   const { login } = useAuthStore();
 
   const onSubmit = (values: SignUpFormValuesType) => {
-    try {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const updatedUsers = [...users, values];
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const updatedUsers = [...users, values];
 
-      localStorage.setItem('users', JSON.stringify(updatedUsers));
-    } catch {
-      console.error('회원가입 실패');
-    }
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
 
     login({
       email: values.email,
@@ -35,6 +33,15 @@ const SignUp = () => {
     });
 
     nav('/home');
+  };
+
+  const checkEmail = (email: string) => {
+    try {
+      isEmailDuplicated(email);
+      setFieldError('email', '');
+    } catch {
+      setFieldError('email', '이미 가입된 이메일입니다.');
+    }
   };
 
   const {
@@ -46,6 +53,7 @@ const SignUp = () => {
     handleCheckboxChange,
     handleBlur,
     handleSubmit,
+    setFieldError,
   } = useForm<SignUpFormValuesType>({
     initialValues: signUpInitialValues,
     onSubmit,
@@ -69,25 +77,32 @@ const SignUp = () => {
                   error={errors[id]}
                   touched={touched[id]}
                 >
-                  <Input
-                    id={id}
-                    type={type}
-                    value={values[id]}
-                    placeholder={placeholder}
-                    error={errors[id]}
-                    touched={touched[id]}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    showToggle={showToggle}
-                    inputMode={inputMode}
-                  />
+                  <div className='flex gap-3'>
+                    <Input
+                      id={id}
+                      type={type}
+                      value={values[id]}
+                      placeholder={placeholder}
+                      error={errors[id]}
+                      touched={touched[id]}
+                      onChange={handleInputChange}
+                      onBlur={handleBlur}
+                      showToggle={showToggle}
+                      inputMode={inputMode}
+                    />
+                    {id === 'email' && (
+                      <DuplicateButton value={values[id]} onCheck={checkEmail}>
+                        중복 확인
+                      </DuplicateButton>
+                    )}
+                  </div>
                 </InputWrapper>
               );
             },
           )}
 
           {/* 직군: 단일 선택 */}
-          <InputWrapper id='jobCategory' label='직군'>
+          <InputWrapper label='직군'>
             {jobCategory.map(({ name, id, value }) => {
               return (
                 <Radio
@@ -104,7 +119,6 @@ const SignUp = () => {
 
           {/* 관심 카테고리: 복수 선택 */}
           <InputWrapper
-            id='interests'
             label='관심 카테고리'
             error={errors['interests']}
             touched={touched['interests']}
