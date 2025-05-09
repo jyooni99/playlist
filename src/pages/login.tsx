@@ -15,19 +15,27 @@ const Login = () => {
   const onSubmit = (values: LoginFormValuesType) => {
     try {
       login({ email: values.email, password: values.password });
+      nav('/home');
     } catch {
-      console.error('로그인 실패');
+      setFieldError('email', ' ');
+      setFieldError('password', '이메일 또는 비밀번호를 확인해주세요.');
     }
-
-    nav('/home');
   };
 
-  const { values, touched, errors, isValid, handleInputChange, handleBlur, handleSubmit } =
-    useForm<LoginFormValuesType>({
-      initialValues: loginInitialValues,
-      onSubmit,
-      validate: loginValidator,
-    });
+  const {
+    values,
+    touched,
+    errors,
+    isValid,
+    handleInputChange,
+    handleBlur,
+    handleSubmit,
+    setFieldError,
+  } = useForm<LoginFormValuesType>({
+    initialValues: loginInitialValues,
+    onSubmit,
+    validate: loginValidator,
+  });
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>

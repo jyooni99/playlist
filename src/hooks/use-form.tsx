@@ -57,6 +57,11 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
     }
   };
 
+  // 외부에서 에러 메시지 설정
+  const setFieldError = (name: keyof T, errorMessage: string) => {
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+  };
+
   useEffect(() => {
     const validationErrors = validate(values);
     setErrors(validationErrors);
@@ -70,6 +75,7 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
     handleBlur,
     handleSubmit,
     handleCheckboxChange,
+    setFieldError,
     isValid: Object.keys(errors).length === 0 && isInitialized,
   };
 }
