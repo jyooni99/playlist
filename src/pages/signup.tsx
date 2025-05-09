@@ -2,27 +2,31 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Input from '../components/form/input';
-import Radio from '../components/radio';
-import Checkbox from '../components/checkbox';
+import Radio from '../components/form/radio';
+import Checkbox from '../components/form/checkbox';
+import InputWrapper from '../components/form/input-wrapper';
+import { DuplicateButton } from '../components/form/duplicate-button';
+
 import useForm from '../hooks/use-form';
 import { signUpValidator } from '../utils/validators';
+import { isEmailDuplicated } from '../utils/is-email-duplicated';
 import {
   interests,
   jobCategory,
   signUpFields,
   signUpInitialValues,
 } from '../constants/form-fields';
+
 import type { SignUpFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
-import InputWrapper from '../components/form/input-wrapper';
-import { DuplicateButton } from '../components/duplicate-button';
-import { isEmailDuplicated } from '../utils/is-email-duplicated';
 
 const SignUp = () => {
-  const [isCheckedEmail, setIsCheckedEmail] = useState<boolean>(false);
   const nav = useNavigate();
   const { login } = useAuthStore();
 
+  const [isCheckedEmail, setIsCheckedEmail] = useState<boolean>(false);
+
+  // 폼 제출 함수
   const onSubmit = (values: SignUpFormValuesType) => {
     if (!isCheckedEmail) {
       setFieldError('email', '이메일 중복확인을 해주세요.');
@@ -42,27 +46,6 @@ const SignUp = () => {
     }
   };
 
-  const checkEmail = (email: string) => {
-    try {
-      isEmailDuplicated(email);
-      clearFieldError('email');
-      setIsCheckedEmail(true);
-    } catch {
-      setFieldError('email', '이미 가입된 이메일입니다.');
-      setIsCheckedEmail(false);
-    }
-  };
-
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
-    if (name === 'email') {
-      clearFieldError('email');
-      setIsCheckedEmail(false);
-    }
-
-    handleInputChange(e);
-  };
-
   const {
     values,
     touched,
@@ -76,10 +59,30 @@ const SignUp = () => {
     clearFieldError,
   } = useForm<SignUpFormValuesType>({
     initialValues: signUpInitialValues,
-    onSubmit,
     validate: signUpValidator,
+    onSubmit,
   });
 
+  // 이메일이 중복되지 않을 경우 에러 제거, 중복일경우 에러 추가
+  const checkEmail = (email: string) => {
+    try {
+      isEmailDuplicated(email);
+      clearFieldError('email');
+      setIsCheckedEmail(true);
+    } catch {
+      setFieldError('email', '이미 가입된 이메일입니다.');
+      setIsCheckedEmail(false);
+    }
+  };
+
+  // 이메일 값이 변경될 경우 중복확인 초기화 + 에러 제거
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearFieldError('email');
+    setIsCheckedEmail(false);
+    handleInputChange(e);
+  };
+
+  // 이메일 중복확인을 하지 않은 상태에서 필드를 나갈 경우 에러 처리
   useEffect(() => {
     if (touched.email && !isCheckedEmail && values.email) {
       setFieldError('email', '이메일 중복 확인을 해주세요.');
@@ -111,7 +114,7 @@ const SignUp = () => {
                       placeholder={placeholder}
                       error={errors[id]}
                       touched={touched[id]}
-                      onChange={handleValueChange}
+                      onChange={id === 'email' ? handleEmailChange : handleInputChange}
                       onBlur={handleBlur}
                       showToggle={showToggle}
                       inputMode={inputMode}

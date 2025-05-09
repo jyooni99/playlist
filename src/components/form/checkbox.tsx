@@ -1,4 +1,4 @@
-import type { CheckboxField } from '../types/field';
+import type { CheckboxField } from '../../types/field';
 
 type CheckboxProps = CheckboxField & {
   checked: boolean;

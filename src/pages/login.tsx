@@ -12,6 +12,7 @@ const Login = () => {
   const nav = useNavigate();
   const { login } = useAuthStore();
 
+  // 로그인 폼 제출 함수
   const onSubmit = (values: LoginFormValuesType) => {
     try {
       login({ email: values.email, password: values.password });

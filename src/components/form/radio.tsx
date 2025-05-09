@@ -1,4 +1,4 @@
-import type { RadioField } from '../types/field';
+import type { RadioField } from '../../types/field';
 
 type RadioProps = RadioField & {
   checked: boolean;
