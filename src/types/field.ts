@@ -17,8 +17,6 @@ export type SignUpInputField = CommonInputField & {
   id: keyof SignUpFormValuesType;
   helperText?: string;
   showToggle?: boolean;
-  rightButtonLabel?: string;
-  rightButtonAction?: () => void;
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
 };
 
