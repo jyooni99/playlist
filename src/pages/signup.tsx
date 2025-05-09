@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Input from '../components/form/input';
@@ -18,30 +19,48 @@ import { DuplicateButton } from '../components/duplicate-button';
 import { isEmailDuplicated } from '../utils/is-email-duplicated';
 
 const SignUp = () => {
+  const [isCheckedEmail, setIsCheckedEmail] = useState<boolean>(false);
   const nav = useNavigate();
   const { login } = useAuthStore();
 
   const onSubmit = (values: SignUpFormValuesType) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const updatedUsers = [...users, values];
+    if (!isCheckedEmail) {
+      setFieldError('email', '이메일 중복확인을 해주세요.');
+      return;
+    } else {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const updatedUsers = [...users, values];
 
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-    login({
-      email: values.email,
-      password: values.password,
-    });
+      login({
+        email: values.email,
+        password: values.password,
+      });
 
-    nav('/home');
+      nav('/home');
+    }
   };
 
   const checkEmail = (email: string) => {
     try {
       isEmailDuplicated(email);
       clearFieldError('email');
+      setIsCheckedEmail(true);
     } catch {
       setFieldError('email', '이미 가입된 이메일입니다.');
+      setIsCheckedEmail(false);
     }
+  };
+
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    if (name === 'email') {
+      clearFieldError('email');
+      setIsCheckedEmail(false);
+    }
+
+    handleInputChange(e);
   };
 
   const {
@@ -60,6 +79,12 @@ const SignUp = () => {
     onSubmit,
     validate: signUpValidator,
   });
+
+  useEffect(() => {
+    if (touched.email && !isCheckedEmail && values.email) {
+      setFieldError('email', '이메일 중복 확인을 해주세요.');
+    }
+  }, [values.email, touched.email, isCheckedEmail]);
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
@@ -86,7 +111,7 @@ const SignUp = () => {
                       placeholder={placeholder}
                       error={errors[id]}
                       touched={touched[id]}
-                      onChange={handleInputChange}
+                      onChange={handleValueChange}
                       onBlur={handleBlur}
                       showToggle={showToggle}
                       inputMode={inputMode}
@@ -143,7 +168,7 @@ const SignUp = () => {
             <button
               type='submit'
               className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition disabled:bg-gray-400 disabled:cursor-default'
-              disabled={!isValid}
+              disabled={!(isValid && isCheckedEmail)}
             >
               회원가입
             </button>
