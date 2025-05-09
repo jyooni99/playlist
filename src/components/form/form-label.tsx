@@ -1,7 +1,7 @@
 import React from 'react';
 
 type FormLabelProps = {
-  htmlFor: string;
+  htmlFor?: string;
   children: React.ReactNode;
 };
 

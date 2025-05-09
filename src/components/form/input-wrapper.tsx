@@ -5,7 +5,7 @@ import FormLabel from './form-label';
 import FormErrorMessage from './form-error-message';
 
 type InputWrapperProps = {
-  id: string;
+  id?: string;
   label?: string;
   helperText?: string;
   error?: string;
