@@ -87,7 +87,7 @@ const SignUp = () => {
     if (touched.email && !isCheckedEmail && values.email) {
       setFieldError('email', '이메일 중복 확인을 해주세요.');
     }
-  }, [values.email, touched.email, isCheckedEmail]);
+  }, [values.email, touched.email, isCheckedEmail, setFieldError]);
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
