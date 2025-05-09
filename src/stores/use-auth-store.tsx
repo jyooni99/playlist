@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthStore>()(
           });
           return true;
         }
-        return false;
+        throw new Error('아이디 혹은 비밀번호를 확인해주세요.');
       },
 
       logout: () => set({ user: null, isLoggedIn: false }),

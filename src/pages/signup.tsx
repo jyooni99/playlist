@@ -1,16 +1,22 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import Input from '../components/input';
-import Radio from '../components/radio';
-import Checkbox from '../components/checkbox';
+import Input from '../components/form/input';
+import Radio from '../components/form/radio';
+import Checkbox from '../components/form/checkbox';
+import InputWrapper from '../components/form/input-wrapper';
+import { DuplicateButton } from '../components/form/duplicate-button';
+
 import useForm from '../hooks/use-form';
 import { signUpValidator } from '../utils/validators';
+import { isEmailDuplicated } from '../utils/is-email-duplicated';
 import {
   interests,
   jobCategory,
   signUpFields,
   signUpInitialValues,
 } from '../constants/form-fields';
+
 import type { SignUpFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
 
@@ -18,22 +24,26 @@ const SignUp = () => {
   const nav = useNavigate();
   const { login } = useAuthStore();
 
+  const [isCheckedEmail, setIsCheckedEmail] = useState<boolean>(false);
+
+  // 폼 제출 함수
   const onSubmit = (values: SignUpFormValuesType) => {
-    try {
+    if (!isCheckedEmail) {
+      setFieldError('email', '이메일 중복확인을 해주세요.');
+      return;
+    } else {
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       const updatedUsers = [...users, values];
 
       localStorage.setItem('users', JSON.stringify(updatedUsers));
-    } catch {
-      console.error('회원가입 실패');
+
+      login({
+        email: values.email,
+        password: values.password,
+      });
+
+      nav('/home');
     }
-
-    login({
-      email: values.email,
-      password: values.password,
-    });
-
-    nav('/home');
   };
 
   const {
@@ -45,55 +55,83 @@ const SignUp = () => {
     handleCheckboxChange,
     handleBlur,
     handleSubmit,
+    setFieldError,
+    clearFieldError,
   } = useForm<SignUpFormValuesType>({
     initialValues: signUpInitialValues,
-    onSubmit,
     validate: signUpValidator,
+    onSubmit,
   });
 
+  // 이메일이 중복되지 않을 경우 에러 제거, 중복일경우 에러 추가
+  const checkEmail = (email: string) => {
+    try {
+      isEmailDuplicated(email);
+      clearFieldError('email');
+      setIsCheckedEmail(true);
+    } catch {
+      setFieldError('email', '이미 가입된 이메일입니다.');
+      setIsCheckedEmail(false);
+    }
+  };
+
+  // 이메일 값이 변경될 경우 중복확인 초기화 + 에러 제거
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearFieldError('email');
+    setIsCheckedEmail(false);
+    handleInputChange(e);
+  };
+
+  // 이메일 중복확인을 하지 않은 상태에서 필드를 나갈 경우 에러 처리
+  useEffect(() => {
+    if (touched.email && !isCheckedEmail && values.email) {
+      setFieldError('email', '이메일 중복 확인을 해주세요.');
+    }
+  }, [values.email, touched.email, isCheckedEmail, setFieldError]);
+
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
-      <div className='w-full max-w-md bg-white pt-10 pb-20 px-8 rounded-xl'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 py-20 px-5'>
+      <div className='w-full max-w-lg bg-white pt-10 pb-20 sm:px-8 px-5 rounded-xl'>
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>회원가입</h2>
         <form onSubmit={handleSubmit}>
           {/* 이메일, 비밀번호, 생년월일 */}
           {signUpFields.map(
-            ({
-              id,
-              type,
-              label,
-              placeholder,
-              helperText,
-              rightButtonLabel,
-              rightButtonAction,
-              inputMode,
-              showToggle,
-            }) => {
+            ({ id, type, label, placeholder, helperText, inputMode, showToggle }) => {
               return (
-                <Input
+                <InputWrapper
                   key={id}
                   id={id}
-                  type={type}
                   label={label}
-                  placeholder={placeholder}
-                  value={values[id]}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
+                  helperText={helperText}
                   error={errors[id]}
                   touched={touched[id]}
-                  rightButtonLabel={rightButtonLabel}
-                  rightButtonAction={rightButtonAction}
-                  helperText={helperText}
-                  inputMode={inputMode}
-                  showToggle={showToggle}
-                />
+                >
+                  <div className='flex gap-3'>
+                    <Input
+                      id={id}
+                      type={type}
+                      value={values[id]}
+                      placeholder={placeholder}
+                      error={errors[id]}
+                      touched={touched[id]}
+                      onChange={id === 'email' ? handleEmailChange : handleInputChange}
+                      onBlur={handleBlur}
+                      showToggle={showToggle}
+                      inputMode={inputMode}
+                    />
+                    {id === 'email' && (
+                      <DuplicateButton value={values[id]} onCheck={checkEmail}>
+                        중복 확인
+                      </DuplicateButton>
+                    )}
+                  </div>
+                </InputWrapper>
               );
             },
           )}
 
           {/* 직군: 단일 선택 */}
-          <p className='text-sm'>직군</p>
-          <div className='flex flex-col py-2 gap-4'>
+          <InputWrapper label='직군'>
             {jobCategory.map(({ name, id, value }) => {
               return (
                 <Radio
@@ -106,11 +144,14 @@ const SignUp = () => {
                 />
               );
             })}
-          </div>
+          </InputWrapper>
 
           {/* 관심 카테고리: 복수 선택 */}
-          <p className='text-sm pt-4'>관심 카테고리</p>
-          <div className='gap-4'>
+          <InputWrapper
+            label='관심 카테고리'
+            error={errors['interests']}
+            touched={touched['interests']}
+          >
             {interests.map(({ name, id, value }) => {
               return (
                 <Checkbox
@@ -123,17 +164,14 @@ const SignUp = () => {
                 />
               );
             })}
-          </div>
-          {errors['interests'] && touched['interests'] && (
-            <p className='mt-2 text-xs text-red-600'>{errors['interests']}</p>
-          )}
+          </InputWrapper>
 
           {/* 회원가입 버튼 */}
           <div className='mt-8'>
             <button
               type='submit'
               className='w-full py-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-800 transition disabled:bg-gray-400 disabled:cursor-default'
-              disabled={!isValid}
+              disabled={!(isValid && isCheckedEmail)}
             >
               회원가입
             </button>
@@ -144,7 +182,7 @@ const SignUp = () => {
         <div className='mt-6 text-center'>
           <p className='text-sm text-gray-600'>
             <span>Playlist 회원이신가요?</span>
-            <Link to='/signup' className='text-black font-semibold hover:underline ml-1'>
+            <Link to='/login' className='text-black font-semibold hover:underline ml-1'>
               로그인
             </Link>
           </p>

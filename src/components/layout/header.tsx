@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <header>
-      <nav className='w-full fixed top-0 bg-white'>
+      <nav className='w-full fixed top-0 bg-white z-10'>
         <div className='w-full flex justify-between items-center py-5 px-5'>
           {/* 로고 */}
           <div>

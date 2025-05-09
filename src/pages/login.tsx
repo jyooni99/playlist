@@ -1,9 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import Input from '../components/input';
+import Input from '../components/form/input';
+import InputWrapper from '../components/form/input-wrapper';
+
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
 import { loginFields, loginInitialValues } from '../constants/form-fields';
+
 import type { LoginFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
 
@@ -11,42 +14,51 @@ const Login = () => {
   const nav = useNavigate();
   const { login } = useAuthStore();
 
+  // 로그인 폼 제출 함수
   const onSubmit = (values: LoginFormValuesType) => {
     try {
       login({ email: values.email, password: values.password });
+      nav('/home');
     } catch {
-      console.error('로그인 실패');
+      setFieldError('email', ' ');
+      setFieldError('password', '이메일 또는 비밀번호를 확인해주세요.');
     }
-
-    nav('/home');
   };
 
-  const { values, touched, errors, isValid, handleInputChange, handleBlur, handleSubmit } =
-    useForm<LoginFormValuesType>({
-      initialValues: loginInitialValues,
-      onSubmit,
-      validate: loginValidator,
-    });
+  const {
+    values,
+    touched,
+    errors,
+    isValid,
+    handleInputChange,
+    handleBlur,
+    handleSubmit,
+    setFieldError,
+  } = useForm<LoginFormValuesType>({
+    initialValues: loginInitialValues,
+    onSubmit,
+    validate: loginValidator,
+  });
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
-      <div className='w-full max-w-md bg-white pt-10 pb-20 px-8 rounded-xl'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 px-5'>
+      <div className='w-full max-w-lg bg-white pt-10 pb-20 sm:px-8 px-5 rounded-xl '>
         <h2 className='text-3xl font-bold text-center text-gray-800 mb-12'>로그인</h2>
         <form onSubmit={handleSubmit}>
           {loginFields.map(({ id, type, label, placeholder }) => {
             return (
-              <Input
-                key={id}
-                id={id}
-                type={type}
-                label={label}
-                placeholder={placeholder}
-                value={values[id]}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-                error={errors[id]}
-                touched={touched[id]}
-              />
+              <InputWrapper key={id} id={id} label={label} error={errors[id]} touched={touched[id]}>
+                <Input
+                  id={id}
+                  type={type}
+                  placeholder={placeholder}
+                  value={values[id]}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                  error={errors[id]}
+                  touched={touched[id]}
+                />
+              </InputWrapper>
             );
           })}
           <div className='mt-8'>

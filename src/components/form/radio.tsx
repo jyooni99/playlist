@@ -1,4 +1,4 @@
-import type { RadioField } from '../types/field';
+import type { RadioField } from '../../types/field';
 
 type RadioProps = RadioField & {
   checked: boolean;
@@ -8,7 +8,7 @@ type RadioProps = RadioField & {
 const Radio = ({ id, name, value, checked, onChange }: RadioProps) => {
   return (
     <div
-      className={`w-full flex gap-2 items-center border py-2 px-3 rounded-md  ${checked ? 'outline-1 outline-black' : 'border-gray-300'}`}
+      className={`w-full flex gap-2 items-center border mb-3 py-2 px-3 rounded-md  ${checked ? 'outline-1 outline-black' : 'border-gray-300'}`}
     >
       <div className='flex items-center justify-center w-[13px] h-[13px] relative'>
         <input
