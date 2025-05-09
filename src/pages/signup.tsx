@@ -38,7 +38,7 @@ const SignUp = () => {
   const checkEmail = (email: string) => {
     try {
       isEmailDuplicated(email);
-      setFieldError('email', '');
+      clearFieldError('email');
     } catch {
       setFieldError('email', '이미 가입된 이메일입니다.');
     }
@@ -54,6 +54,7 @@ const SignUp = () => {
     handleBlur,
     handleSubmit,
     setFieldError,
+    clearFieldError,
   } = useForm<SignUpFormValuesType>({
     initialValues: signUpInitialValues,
     onSubmit,

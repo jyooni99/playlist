@@ -61,8 +61,17 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
   };
 
   // 외부에서 에러 메시지 설정
-  const setFieldError = (name: keyof T, errorMessage: string) => {
+  const setFieldError = (name: keyof T, errorMessage: string | undefined) => {
     setExternalErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+  };
+
+  // 외부에서 설정한 에러 메시지 제거
+  const clearFieldError = (name: keyof T) => {
+    setExternalErrors((prev) => {
+      const prevError = { ...prev }; // 현재 에러 값을 복사한 새 객체 생성
+      delete prevError[name]; // 특정 name 에러 제거
+      return prevError; // 변경된 객체로 교체
+    });
   };
 
   useEffect(() => {
@@ -79,6 +88,7 @@ function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
     handleSubmit,
     handleCheckboxChange,
     setFieldError,
+    clearFieldError,
     isValid: Object.keys(errors).length === 0 && isInitialized,
   };
 }
