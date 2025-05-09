@@ -1,11 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import Input from '../components/input';
+import Input from '../components/form/input';
 import useForm from '../hooks/use-form';
 import { loginValidator } from '../utils/validators';
 import { loginFields, loginInitialValues } from '../constants/form-fields';
 import type { LoginFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
+import InputWrapper from '../components/form/input-wrapper';
 
 const Login = () => {
   const nav = useNavigate();
@@ -35,18 +36,18 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           {loginFields.map(({ id, type, label, placeholder }) => {
             return (
-              <Input
-                key={id}
-                id={id}
-                type={type}
-                label={label}
-                placeholder={placeholder}
-                value={values[id]}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-                error={errors[id]}
-                touched={touched[id]}
-              />
+              <InputWrapper key={id} id={id} label={label} error={errors[id]} touched={touched[id]}>
+                <Input
+                  id={id}
+                  type={type}
+                  placeholder={placeholder}
+                  value={values[id]}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                  error={errors[id]}
+                  touched={touched[id]}
+                />
+              </InputWrapper>
             );
           })}
           <div className='mt-8'>

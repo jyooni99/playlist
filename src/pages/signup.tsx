@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import Input from '../components/input';
+import Input from '../components/form/input';
 import Radio from '../components/radio';
 import Checkbox from '../components/checkbox';
 import useForm from '../hooks/use-form';
@@ -13,6 +13,7 @@ import {
 } from '../constants/form-fields';
 import type { SignUpFormValuesType } from '../types/form';
 import { useAuthStore } from '../stores/use-auth-store';
+import InputWrapper from '../components/form/input-wrapper';
 
 const SignUp = () => {
   const nav = useNavigate();
@@ -58,42 +59,35 @@ const SignUp = () => {
         <form onSubmit={handleSubmit}>
           {/* 이메일, 비밀번호, 생년월일 */}
           {signUpFields.map(
-            ({
-              id,
-              type,
-              label,
-              placeholder,
-              helperText,
-              rightButtonLabel,
-              rightButtonAction,
-              inputMode,
-              showToggle,
-            }) => {
+            ({ id, type, label, placeholder, helperText, inputMode, showToggle }) => {
               return (
-                <Input
+                <InputWrapper
                   key={id}
                   id={id}
-                  type={type}
                   label={label}
-                  placeholder={placeholder}
-                  value={values[id]}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
+                  helperText={helperText}
                   error={errors[id]}
                   touched={touched[id]}
-                  rightButtonLabel={rightButtonLabel}
-                  rightButtonAction={rightButtonAction}
-                  helperText={helperText}
-                  inputMode={inputMode}
-                  showToggle={showToggle}
-                />
+                >
+                  <Input
+                    id={id}
+                    type={type}
+                    value={values[id]}
+                    placeholder={placeholder}
+                    error={errors[id]}
+                    touched={touched[id]}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    showToggle={showToggle}
+                    inputMode={inputMode}
+                  />
+                </InputWrapper>
               );
             },
           )}
 
           {/* 직군: 단일 선택 */}
-          <p className='text-sm'>직군</p>
-          <div className='flex flex-col py-2 gap-4'>
+          <InputWrapper id='jobCategory' label='직군'>
             {jobCategory.map(({ name, id, value }) => {
               return (
                 <Radio
@@ -106,11 +100,15 @@ const SignUp = () => {
                 />
               );
             })}
-          </div>
+          </InputWrapper>
 
           {/* 관심 카테고리: 복수 선택 */}
-          <p className='text-sm pt-4'>관심 카테고리</p>
-          <div className='gap-4'>
+          <InputWrapper
+            id='interests'
+            label='관심 카테고리'
+            error={errors['interests']}
+            touched={touched['interests']}
+          >
             {interests.map(({ name, id, value }) => {
               return (
                 <Checkbox
@@ -123,10 +121,7 @@ const SignUp = () => {
                 />
               );
             })}
-          </div>
-          {errors['interests'] && touched['interests'] && (
-            <p className='mt-2 text-xs text-red-600'>{errors['interests']}</p>
-          )}
+          </InputWrapper>
 
           {/* 회원가입 버튼 */}
           <div className='mt-8'>
